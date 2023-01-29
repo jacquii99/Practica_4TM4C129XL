@@ -47,15 +47,15 @@ extern void Configura_Reg_ADC0(void)
     //Pag 1091 Este registro (ADCEMUX) selecciona el evento que activa la conversión (trigger)
     ADC0->EMUX  = (0x0000); //por procesador 
     //Pag 1129 Este registro (ADCSSMUX2) define las entradas analógicas con el canal y secuenciador seleccionado
-    ADC0->SSMUX2 = 0x0089;
+    ADC0->SSMUX2 = 0x0089;//recibe a los canales 8 y 9 
     //pag 868 Este registro (ADCSSCTL2), configura el bit de control de muestreo y la interrupción
-    ADC0->SSCTL2 = (1<<6) | (1<<5) ;
+    ADC0->SSCTL2 = (1<<6) | (1<<5) ;//interrumpe
     /* Enable ADC Interrupt */
-    ADC0->IM |= (1<<2); /* Unmask ADC0 sequence 2 interrupt pag 1082*/
+    ADC0->IM |= (1<<2); /* Unmask ADC0 sequence 2 interrupt pag 1082*/ //interrumpe conversion 
     //NVIC_PRI4_R = (NVIC_PRI4_R & 0xFFFFFF00) | 0x00000020;
     //NVIC_EN0_R = 0x00010000;
     //Pag 1077 (ADCACTSS) Este registro controla la activación de los secuenciadores
-    ADC0->ACTSS = (1<<3) | (1<<2) | (0<<1) | (1<<0);
+    ADC0->ACTSS = (1<<3) | (1<<2) | (0<<1) | (1<<0);//habilitar secuenciadores 
     ADC0->PSSI |= (1<<2);
 }
 extern void ADC0_InSeq2(uint16_t *Result, uint16_t*duty){
