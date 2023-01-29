@@ -28,8 +28,8 @@ extern void Configura_Reg_ADC0(void)
     GPIOB_AHB->AFSEL = (1<<5);
     //(GPIODEN) pag.781 desabilita el modo digital
     GPIOE_AHB->DEN = (0<<4) | (0<<5 );
-    GPIOD_AHB->DEN = (1<<7) | (1<<5) | (1<<4); 
-    GPIOB_AHB->DEN = (1<<5);
+    GPIOD_AHB->DEN = (0<<7) | (0<<5) | (0<<4); 
+    GPIOB_AHB->DEN = (0<<5);
     //Pag 787 GPIOPCTL registro combinado con el GPIOAFSEL y la tabla pag 1808
     GPIOE_AHB->PCTL = GPIOE_AHB->PCTL & (0xFFF00FFF);
     GPIOD_AHB->PCTL = GPIOD_AHB->PCTL & (0xF0F00FFF);
