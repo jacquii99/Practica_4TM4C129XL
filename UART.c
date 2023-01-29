@@ -1,32 +1,35 @@
 #include "lib/include.h"
-
-extern void Configurar_UART0(void)
+//UART5 con fclk 40MHZ Baud-rate 28800
+extern void Configurar_UART5(void)
 {
-    SYSCTL->RCGCUART  = (1<<0);   //Paso 1 (RCGCUART) pag.344 UART/modulo0 0->Disable 1->Enable
-    SYSCTL->RCGCGPIO |= (1<<0);     //Paso 2 (RCGCGPIO) pag.340 Enable clock port A
-    //(GPIOAFSEL) pag.671 Enable alternate function
-    GPIOA_AHB->AFSEL = (1<<1) | (1<<0);
-    //GPIO Port Control (GPIOPCTL) PA0-> U0Rx PA1-> U0Tx pag.688
-    GPIOA_AHB->PCTL = (GPIOA_AHB->PCTL&0xFFFFFF00) | 0x00000011;// (1<<0) | (1<<4);//0x00000011
+    SYSCTL->RCGCUART  = (1<<5);   //Paso 1 habilitar (RCGCUART) para uart5 corresponde a PC6 Y PC7 pag.1164 
+    SYSCTL->RCGCGPIO |= (1<<2);     //Paso 2 (RCGCGPIO) habilitar el perifierico  pag.382  Enable clock port A
+    //(GPIOAFSEL) pag.671 Habilitar la funcion alternativa 
+    GPIOC_AHB->AFSEL = (1<<6) | (1<<7); //Pin C6 Y C7 
+    //GPIO Port Control (GPIOPCTL) PC6-> U5Rx PC7-> U5Tx pag.688
+    GPIOC_AHB->PCTL = (GPIOA_AHB->PCTL&0x11FFFFFF) | 0x11000000;// (1<<0) | (1<<4);//0x00000011
+
     // GPIO Digital Enable (GPIODEN) pag.682
-    GPIOA_AHB->DEN = (1<<0) | (1<<1);//PA1 PA0
-    //UART0 UART Control (UARTCTL) pag.918 DISABLE!!
-    UART0->CTL = (0<<9) | (0<<8) | (0<<0);
+    GPIOC_AHB->DEN = (1<<6) | (1<<7);//PC6 Y PC7 
+    //UART5 UART Control (UARTCTL) pag.918 DISABLE!!
+    UART5->CTL = (0<<9) | (0<<8) | (0<<0);
 
     // UART Integer Baud-Rate Divisor (UARTIBRD) pag.914
     /*
-    BRD = 20,000,000 / (16 * 9600) = 130.2
+    BRD = 20,000,000 / (16 * 9600) = 130.2 
+    BRD0 40,000,000 / (16*28800)=86.80555556 
     UARTFBRD[DIVFRAC] = integer(0.2 * 64 + 0.5) = 14
+    UARTFBRD[DIVFRAC] = integer(0.80555556* 64 + 0.5) = 52.05
     */
-    UART0->IBRD = 130;
+    UART5->IBRD = 87;
     // UART Fractional Baud-Rate Divisor (UARTFBRD) pag.915
-    UART0->FBRD = 14;
+    UART5->FBRD = 52;
     //  UART Line Control (UARTLCRH) pag.916
-    UART0->LCRH = (0x3<<5)|(1<<4);
+    UART5->LCRH = (0x3<<5)|(1<<4);
     //  UART Clock Configuration(UARTCC) pag.939
-    UART0->CC =(0<<0);
+    UART5->CC =(0<<0);//para el reloj interno 
     //Disable UART0 UART Control (UARTCTL) pag.918
-    UART0->CTL = (1<<0) | (1<<8) | (1<<9);
+    UART5->CTL = (1<<0) | (1<<8) | (1<<9); //habilitar los pines
 
 
 
