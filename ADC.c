@@ -44,7 +44,7 @@ extern void Configura_Reg_ADC0(void)
     //Pag 1099 Este registro (ADCSSPRI) configura la prioridad de los secuenciadores
     ADC0->SSPRI = 0x0231;
     //Pag 1077 (ADCACTSS) Este registro controla la activación de los secuenciadores
-    ADC0->ACTSS  =   (0<<3) | (0<<2) | (0<<1) | (0<<0);
+    ADC0->ACTSS  =   (0<<2) | (0<<3) | (0<<1);
     //Pag 1091 Este registro (ADCEMUX) selecciona el evento que activa la conversión (trigger)
     ADC0->EMUX  = (0x0000);
     //Pag 1129 Este registro (ADCSSMUX2) define las entradas analógicas con el canal y secuenciador seleccionado
@@ -59,13 +59,15 @@ extern void Configura_Reg_ADC0(void)
     ADC0->ACTSS = (0<<3) | (1<<2) | (0<<1) | (0<<0);
     ADC0->PSSI |= (1<<2);
 }
-extern void ADC0_InSeq2(uint16_t *Result){
+extern void ADC0_InSeq2(uint16_t *Result, uint16_t*duty){
 
     //ADC Processor Sample Sequence Initiate (ADCPSSI)
        ADC0->PSSI = 0x00000004;
        while((ADC0->RIS&0x04)==0){}; // espera al convertidor
        Result[1] = ADC0->SSFIFO2&0xFFF; //  Leer  el resultado almacenado en la pila2
        Result[0] = ADC0->SSFIFO2&0xFFF;
+       duty[0] = (Result[0]*20000)/4096; 
+       duty[1] = (Result[1]*20000)/4096; 
        printChar('A');
        ADC0->ISC = 0x0004;  //Conversion finalizada
 
