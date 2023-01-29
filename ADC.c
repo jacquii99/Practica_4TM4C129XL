@@ -10,8 +10,8 @@ extern void Configura_Reg_ADC0(void)
 {
     /*
     Habilitar el modulo 0 del ADC con seis canales analogicos 
-    en los puertos E, D Y B a una velocidad de conversion de 250ksps
-    con los siguientes ecuenciadores: sec3,sec0y sec2 
+    en los puertos E, D Y B a una velocidad de conversion de 2Msps
+    con los siguientes secuenciadores: sec3,sec0y sec2 
     */
      //Pag 396 para inicializar el modulo de reloj del adc RCGCADC
     SYSCTL->RCGCADC = (1<<0); //modulo 0 del ADC 
@@ -39,7 +39,7 @@ extern void Configura_Reg_ADC0(void)
     GPIOD_AHB->AMSEL = (1<<4) | (1<<5) | (1<<7);
     GPIOB_AHB->AMSEL = (1<<5);
     //Pag 1159 El registro (ADCPC) establece la velocidad de conversión por segundo
-    ADC0->PC = 0x7;//250ksps
+    ADC0->PC = 0x7;//2Msps 
     //Pag 1099 Este registro (ADCSSPRI) configura la prioridad de los secuenciadores
     ADC0->SSPRI = 0x0231;//secuenciador0 prioridad más alta y el secuenciador 3 prioridad más baja
     //Pag 1077 (ADCACTSS) Este registro controla la activación de los secuenciadores
